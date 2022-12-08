@@ -15,7 +15,7 @@ class Aviatier():
         self.leftLeg = Motor(Port.E)
         self.eyes = UltrasonicSensor(Port.C)
         self.hub = InventorHub()
-        
+
         self.angry_mode()
 
     def stop(self):
@@ -27,14 +27,23 @@ class Aviatier():
         print("starting at:")
         print(startingAngle)
 
-        self.arms.run_target(500, startingAngle+540)
-        
+        self.arms.run_target(500, startingAngle+800)
+
+        wait(1000)
+
         # scanning...
-        self.detect_enemy()
-        self.arms.run_target(500, startingAngle-500)
+        angry_rotation = self.detect_enemy()
+        self.arms.run_target(500, startingAngle+100)
 
         self.shoot(1)
         self.shoot(2)
+
+        wait(1000)
+        self.arms.run_target(200, startingAngle)
+
+        print("resetting by:")
+        print(angry_rotation)
+        self.reset_position(angry_rotation)
 
     def shoot(self, chamber:int):
         originalAngle = self.gun.angle()
@@ -54,8 +63,16 @@ class Aviatier():
             print("shot fired")
             self.gun.run_target(100, originalAngle)
         
+    def reset_position(self, angle):
+        print("in reset:")
+        self.rightLeg.run_angle(100, -1*angle, Stop.HOLD, False)
+        self.leftLeg.run_angle(100, -1*angle, Stop.HOLD, True)
+        wait(1000)
+
 
     def detect_enemy(self):
+        angry_rotation = 0
+
         while True:
             # Print the measured distance.
             print(self.eyes.distance())
@@ -63,10 +80,11 @@ class Aviatier():
             # If an object is detected closer than 500mm:
             if self.eyes.distance() < 800:
                 print("enemy detected!")
-                return True
+                return angry_rotation
             else:
-                self.rightLeg.run_angle(100, 1, Stop.HOLD, False)
-                self.leftLeg.run_angle(100, 1, Stop.HOLD, False)
+                self.rightLeg.run_angle(100, 20, Stop.HOLD, False)
+                self.leftLeg.run_angle(100, 20, Stop.HOLD, True)
+                angry_rotation = angry_rotation + 20
 
 
     def find_ball(self):
