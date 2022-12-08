@@ -151,7 +151,6 @@ class Aviatier:
         self.display.animate([battery1, battery2], 50)
         wait(5000)
 
-
     def christmas_face(self):
         self.light.animate([Color.GREEN, Color.RED], 500)
 
@@ -201,7 +200,81 @@ class Aviatier:
     def explosion(self):
         self.light.on(Color.RED)
 
-        # o O --> Ringe
+        explosion1 = Matrix(
+            [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 100, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        )
+        explosion2 = Matrix(
+            [
+                [0, 0, 0, 0, 0],
+                [0, 0, 100, 0, 0],
+                [0, 100, 75, 100, 0],
+                [0, 0, 100, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        )
+        explosion3 = Matrix(
+            [
+                [0, 0, 100, 0, 0],
+                [0, 100, 75, 100, 0],
+                [100, 75, 50, 75, 100],
+                [0, 100, 75, 100, 0],
+                [0, 0, 100, 0, 0]
+            ]
+        )
+        explosion4 = Matrix(
+            [
+                [0, 100, 75, 100, 0],
+                [100, 75, 50, 75, 100],
+                [75, 50, 25, 50, 75],
+                [100, 75, 50, 75, 100],
+                [0, 100, 75, 100, 0]
+            ]
+        )
+        explosion5 = Matrix(
+            [
+                [100, 75, 50, 75, 100],
+                [75, 50, 25, 50, 75],
+                [50, 25, 0, 25, 50],
+                [75, 50, 25, 50, 75],
+                [100, 75, 50, 75, 100]
+            ]
+        )
+        explosion6 = Matrix(
+            [
+                [75, 50, 25, 50, 75],
+                [50, 25, 0, 25, 50],
+                [25, 0, 0, 0, 25],
+                [50, 25, 0, 25, 50],
+                [75, 50, 25, 50, 75]
+            ]
+        )
+        explosion7 = Matrix(
+            [
+                [50, 25, 0, 25, 50],
+                [25, 0, 0, 0, 25],
+                [0, 0, 0, 0, 0],
+                [25, 0, 0, 0, 25],
+                [50, 25, 0, 25, 50]
+            ]
+        )
+        explosion8 = Matrix(
+            [
+                [25, 0, 0, 0, 25],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [25, 0, 0, 0, 25]
+            ]
+        )
+
+        self.display.animate(
+            [explosion1, explosion2, explosion3, explosion4, explosion5, explosion6, explosion7, explosion8], 50)
 
 
 aviatier = Aviatier()
