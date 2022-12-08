@@ -5,43 +5,68 @@ from pybricks.robotics import DriveBase
 from pybricks.tools import wait, StopWatch
 
 print("Hello, AVIATIER!")
-
 class Aviatier():
     ROCK_COLORS = Color.RED
 
     def __init__(self):
-        # Wheels
-        #self.rightMotor = Motor(Port.A)
         self.gun = Motor(Port.B)
-        # Grabber
-        #self.grabber = Motor(Port.F)
-        # Sensors
-        # self.sherloc = ColorSensor(Port.C)
-        # self.eyes = UltrasonicSensor(Port.D)
-
+        self.arms = Motor(Port.D)
+        self.rightLeg = Motor(Port.A)
+        self.leftLeg = Motor(Port.E)
+        self.eyes = UltrasonicSensor(Port.C)
         self.hub = InventorHub()
-        self.shoot()
+        
+        self.angry_mode()
 
     def stop(self):
         self.rightMotor.stop()
         self.leftMotor.stop()
 
-    def shoot(self):
-        self.gun.run_angle(100, 90)
-      
+    def angry_mode(self):
+        startingAngle = self.arms.angle()
+        print("starting at:")
+        print(startingAngle)
 
-    def scan_distance(self):
+        self.arms.run_target(500, startingAngle+540)
+        
+        # scanning...
+        self.detect_enemy()
+        self.arms.run_target(500, startingAngle-500)
+
+        self.shoot(1)
+        self.shoot(2)
+
+    def shoot(self, chamber:int):
+        originalAngle = self.gun.angle()
+        print("original angle:")
+        print(originalAngle)
+                
+        if (chamber == 1):
+            print("shooting left")
+            newAngle = originalAngle-60
+            self.gun.run_target(500, newAngle)
+            print("shot fired")
+            self.gun.run_target(100, originalAngle)
+        else:
+            print("shooting right")
+            newAngle = originalAngle+60
+            self.gun.run_target(500, newAngle)
+            print("shot fired")
+            self.gun.run_target(100, originalAngle)
+        
+
+    def detect_enemy(self):
         while True:
             # Print the measured distance.
             print(self.eyes.distance())
 
             # If an object is detected closer than 500mm:
-            if self.eyes.distance() < 500:
-                # Turn the lights on.
-                self.hub.speaker.beep()
-                print("found something")
-
-                wait(100)
+            if self.eyes.distance() < 800:
+                print("enemy detected!")
+                return True
+            else:
+                self.rightLeg.run_angle(100, 1, Stop.HOLD, False)
+                self.leftLeg.run_angle(100, 1, Stop.HOLD, False)
 
 
     def find_ball(self):
