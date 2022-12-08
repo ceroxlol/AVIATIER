@@ -22,6 +22,41 @@ class Aviatier():
         self.rightMotor.stop()
         self.leftMotor.stop()
 
+    def play_song(self):
+        notes = ["A4/4", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
+        notes2 = ["R/8", "A4/8", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
+        notes3 = ["A4/4", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
+        notes4 = ["R/8", "C5/8", "C5/4", "A4/8",  "C5/8",  "C5/4"]
+        lady_gaga = notes+notes2+notes3+notes4
+        #hub.speaker.play_notes(lady_gaga, tempo=200)
+
+        jingle_bells = ["E4/4", "E4/4", "E4/2",
+                        "E4/4", "E4/4", "E4/2",
+                        "E4/4", "G4/4", "C4/4", "D4/4", "E4/1",
+                        "F4/4", "F4/4", "F4/4", "F4/4", "F4/4", "E4/4", "E4/2",
+                        "G4/4", "G4/4", "F4/4", "D4/4", "C4/1"]
+        #hub.speaker.play_notes(jingle_bells, tempo=200)
+
+        fly = ["C4/2/3", "B4/2/3", "C4/2/3", "C4/8", "A3/4*1.5",
+              "D4/2/3", "D4/2/3", "D4/2/3", "E4/2/3", "F/2/3", "F4/2/3",
+              "F4/2/3", "E4/2/3", "C4/2/3", "G3/2",
+              "C4/2/3", "C4/2/3", "C4/2/3", "C4/2/3", "D4/2/3", "E4/2/3",
+              "E4/2/3", "D4/2/3", "C4/2/3", "D4/2",
+              "H4/2/3", "H4/2/3", "H4/2/3", "H4/2/3", "C4/2/3", "D4/2/3",
+              "D4/2/3", "C4/2/3"]
+        # hub.speaker.play_notes(fly, tempo=100)
+
+        alarm = ["E4/8", "C4/8", "E4/8", "C4/8"]
+                
+        alarm_song = ["E4/4", "C4/2*1.5", "E4/4", "C4/2*1.5",
+                "E4/4", "C4/4", "E4/4", "C4/4", "E4/8", "C4/8", "D4/2*1.5",
+                "D4/8", "E4/8", "F4/4", "F4/4", "R/4",
+                "E4/8", "D4/8", "E4/4", "C4/4", "R/4",
+                "C4/8", "E4/8", "D4/4", "G3/4", "B3/4", "D4/4", "C4/2*1.5"]
+       
+        self.hub.speaker.play_notes(alarm_song, tempo=180)
+
+
     def angry_mode(self):
         startingAngle = self.arms.angle()
         print("starting at:")
@@ -31,12 +66,12 @@ class Aviatier():
 
         wait(1000)
 
-        # scanning...
         angry_rotation = self.detect_enemy()
         self.arms.run_target(500, startingAngle+100)
 
-        self.shoot(1)
-        self.shoot(2)
+        self.play_song() 
+
+        self.shoot(3)
 
         wait(1000)
         self.arms.run_target(200, startingAngle)
@@ -55,16 +90,23 @@ class Aviatier():
             newAngle = originalAngle-60
             self.gun.run_target(500, newAngle)
             print("shot fired")
-            self.gun.run_target(100, originalAngle)
-        else:
+        if (chamber == 2):
             print("shooting right")
             newAngle = originalAngle+60
             self.gun.run_target(500, newAngle)
             print("shot fired")
-            self.gun.run_target(100, originalAngle)
+        else:
+            print("rapid fire")
+            self.gun.run_target(1000, originalAngle+60)
+            print("shot right")
+            self.gun.run_target(1000, originalAngle-60)
+            print("shot left")
+
+        # reset shooting motor to original position  
+        self.gun.run_target(100, originalAngle)
+        
         
     def reset_position(self, angle):
-        print("in reset:")
         self.rightLeg.run_angle(100, -1*angle, Stop.HOLD, False)
         self.leftLeg.run_angle(100, -1*angle, Stop.HOLD, True)
         wait(1000)
@@ -84,6 +126,8 @@ class Aviatier():
             else:
                 self.rightLeg.run_angle(100, 20, Stop.HOLD, False)
                 self.leftLeg.run_angle(100, 20, Stop.HOLD, True)
+                self.hub.speaker.play_notes(
+                    ["E4/4", "C4/4"], tempo=180)
                 angry_rotation = angry_rotation + 20
 
 
