@@ -11,6 +11,8 @@ class Aviatier:
         self.display = self.hub.display
         self.light = self.hub.light
 
+        self.christmas_face()
+
     def angry_face(self):
         self.light.on(Color.RED)
 
@@ -28,33 +30,16 @@ class Aviatier:
 
         wait(5000)
 
-    def happy_face(self):
-        self.light.on(Color.RED)
-
-        happyface = Matrix(
-            [
-                [15, 100, 0, 100, 15],
-                [100, 30, 100, 30, 100],
-                [0, 0, 0, 0, 0],
-                [100, 25, 10, 25, 100],
-                [15, 100, 100, 100, 15]
-            ]
-        )
-
-        self.display.icon(happyface)
-
-        wait(5000)
-
     def happy_face2(self):
         self.light.on(Color.RED)
 
         happyface = Matrix(
             [
-                [0, 100, 0, 100, 0],
-                [0, 100, 0, 100, 0],
-                [100, 0, 0, 0, 100],
-                [15, 100, 0, 100, 15],
-                [0, 15, 100, 15, 0]
+                [100, 100, 0, 100, 100],
+                [100, 100, 0, 100, 100],
+                [0, 0, 0, 0, 0],
+                [100, 15, 0, 15, 100],
+                [15, 100, 100, 100, 0]
             ]
         )
 
@@ -82,26 +67,18 @@ class Aviatier:
     def blinking_sad_face(self):
         self.light.on(Color.RED)
 
-        matrix = [Matrix(
+        sad_face = Matrix(
             [
-                [100, 100, 0, 100, 100],
+                [0, 100, 0, 100, 0],
                 [100, 100, 0, 100, 100],
                 [0, 0, 0, 0, 0],
                 [25, 100, 100, 100, 25],
                 [100, 15, 0, 15, 100]
             ]
-        ), Matrix(
-            [
-                [0, 0, 0, 0, 0],
-                [100, 100, 0, 100, 100],
-                [0, 0, 0, 0, 0],
-                [25, 100, 100, 100, 25],
-                [100, 15, 0, 15, 100]
-            ]
-        )]
+        )
 
-        self.display.animate(matrix, 600)
-        wait(10000)
+        self.display.icon(sad_face)
+        wait(5000)
 
     def heart_and_stars_face(self):
         heart = Matrix(
@@ -125,7 +102,8 @@ class Aviatier:
                 [50, 0, 100, 0, 50]
             ]
         )
-        self.display.animate([heart_icon, star], 10)
+        self.display.animate([heart_icon, star], 300)
+        wait(5000)
 
     def battery_face(self):
         self.light.on(Color.RED)
@@ -133,22 +111,22 @@ class Aviatier:
         battery1 = Matrix(
             [
                 [0, 0, 0, 0, 0],
-                [100, 100, 100, 100, 100],
-                [100, 0, 0, 100, 100],
-                [100, 100, 100, 100, 100],
+                [0, 100, 100, 100, 100],
+                [100, 100, 0, 100, 100],
+                [0, 100, 100, 100, 100],
                 [0, 0, 0, 0, 0]
             ]
         )
         battery2 = Matrix(
             [
                 [0, 0, 0, 0, 0],
-                [100, 100, 100, 100, 100],
-                [100, 0, 0, 0, 100],
-                [100, 100, 100, 100, 100],
+                [0, 100, 100, 100, 100],
+                [100, 100, 0, 0, 100],
+                [0, 100, 100, 100, 100],
                 [0, 0, 0, 0, 0]
             ]
         )
-        self.display.animate([battery1, battery2], 50)
+        self.display.animate([battery1, battery2], 500)
         wait(5000)
 
     def christmas_face(self):
@@ -157,10 +135,10 @@ class Aviatier:
         christmas = Matrix(
             [
                 [0, 0, 100, 0, 0],
-                [0, 25, 100, 25, 0],
-                [25, 50, 100, 50, 25],
-                [50, 75, 100, 75, 50],
-                [75, 100, 100, 100, 75]
+                [0, 50, 100, 50, 0],
+                [25, 75, 100, 75, 50],
+                [100, 100, 100, 100, 100],
+                [0, 0, 100, 0, 0]
             ]
         )
         self.display.icon(christmas)
@@ -172,10 +150,10 @@ class Aviatier:
         plane = Matrix(
             [
                 [100, 25, 0, 0, 0],
-                [25, 100, 50, 10, 0],
-                [0, 50, 100, 75, 75],
-                [0, 10, 75, 100, 15],
-                [0, 0, 75, 15, 100]
+                [25, 100, 75, 75, 50],
+                [0, 75, 100, 15, 15],
+                [0, 75, 15, 100, 15],
+                [0, 50, 15, 15, 100]
             ]
         )
         self.display.icon(plane)
@@ -274,7 +252,8 @@ class Aviatier:
         )
 
         self.display.animate(
-            [explosion1, explosion2, explosion3, explosion4, explosion5, explosion6, explosion7, explosion8], 50)
+            [explosion1, explosion2, explosion3, explosion4, explosion5, explosion6, explosion7, explosion8], 200)
+        wait(5000)
 
 
 aviatier = Aviatier()
