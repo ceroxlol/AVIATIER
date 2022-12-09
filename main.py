@@ -16,11 +16,12 @@ class Aviatier():
         self.eyes = UltrasonicSensor(Port.C)
         self.hub = InventorHub()
 
-        self.angry_mode()
+        # set volume
+        self.hub.speaker.volume(20)
 
-    def stop(self):
-        self.rightMotor.stop()
-        self.leftMotor.stop()
+        self.jingle_bells()
+
+        # self.angry_mode()
 
     def play_song(self):
         notes = ["A4/4", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
@@ -55,6 +56,55 @@ class Aviatier():
                 "C4/8", "E4/8", "D4/4", "G3/4", "B3/4", "D4/4", "C4/2*1.5"]
        
         self.hub.speaker.play_notes(alarm_song, tempo=180)
+
+    def drive(self, speed):
+        self.leftLeg.run(-1*speed)
+        self.rightLeg.run(speed)
+
+    def turn(self, direction, speed):
+        if direction == 'clockwise':
+            self.leftLeg.run(speed)
+            self.rightLeg.run(speed)
+        elif direction == 'anti':
+            self.leftLeg.run(-1*speed)
+            self.rightLeg.run(-1*speed)
+
+    def stop(self):
+        self.leftLeg.stop()
+        self.rightLeg.stop()
+
+
+
+    def jingle_bells(self):
+        print("starting jingle bells")
+        movingSpeed = 700
+
+        self.arms.run(movingSpeed)
+        self.turn('clockwise', movingSpeed)
+        self.hub.speaker.play_notes(["E4/4", "E4/4", "E4/2"], tempo=200)
+        self.arms.run(-2*movingSpeed)
+        self.hub.speaker.play_notes(["E4/4", "E4/4", "E4/2"], tempo=200)
+        self.arms.run(2*movingSpeed)
+        self.hub.speaker.play_notes(
+            ["E4/4", "G4/4", "C4/4", "D4/4"], tempo=200)
+        self.arms.run(-2*movingSpeed)
+        self.hub.speaker.play_notes(["E4/1"], tempo=200)
+        self.arms.run(2*movingSpeed)
+        self.turn('anti', movingSpeed)
+        self.hub.speaker.play_notes(
+            ["F4/4", "F4/4", "F4/4", "F4/4"], tempo=200)
+        self.arms.run(-2*movingSpeed)
+        self.hub.speaker.play_notes(["F4/4", "E4/4", "E4/2"], tempo=200)
+        self.arms.run(2*movingSpeed)
+        self.hub.speaker.play_notes(
+            ["G4/4", "G4/4", "F4/4", "D4/4"], tempo=200)
+        self.arms.run(-2*movingSpeed)
+        self.hub.speaker.play_notes(["C4/1"], tempo=200)
+        
+        self.arms.run(movingSpeed)
+        wait(1200)
+
+        self.arms.stop()
 
 
     def angry_mode(self):
@@ -158,21 +208,21 @@ class Aviatier():
             if abs(speed) < 100:
                 speed = 0
 
-            leftMotor.run(speed)
-            rightMotor.run(-1 * speed)
+            leftLeg.run(speed)
+            rightLeg.run(-1 * speed)
 
             wait(1000)
-            leftMotor.stop()
-            rightMotor.stop()
+            leftLeg.stop()
+            rightLeg.stop()
             wait(1000)
 
-            print(leftMotor.angle())
+            print(leftLeg.angle())
             print("+90=")
-            newAngle = leftMotor.angle() + 90
+            newAngle = leftLeg.angle() + 90
 
             print(newAngle)
 
-            leftMotor.run_angle(500, newAngle)
+            leftLeg.run_angle(500, newAngle)
 
 
 aviatier = Aviatier()
