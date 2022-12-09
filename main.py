@@ -11,21 +11,26 @@ class Aviatier():
 
     def __init__(self):
         self.COLOR_TRIGGERED_ACTIONS = {
-             # Color.BLUE: self.aviatar,
-             Color.GREEN: self.angry_mode,
-             # Color.RED: self.christmas_ball,
-             # Color.YELLOW: self.pride
-         }
+            Color.BLUE: self.flying,
+            Color.GREEN: self.angry_mode,
+            Color.RED: self.jingle_bells,
+            Color.WHITE: self.bad_romance,
+            Color.YELLOW: self.bad_romance
+        }
         self.gun = Motor(Port.B)
         self.arms = Motor(Port.D)
         self.rightLeg = Motor(Port.A)
         self.leftLeg = Motor(Port.E)
-        self.eyes = UltrasonicSensor(Port.C)
-        self.colorEye = ColorSensor(Port.F)
+        self.eyes = UltrasonicSensor(Port.F)
+        self.colorEye = ColorSensor(Port.C)
         self.hub = InventorHub()
 
+        self.hub.display.orientation(up=Side.RIGHT)
+        self.light = self.hub.light
+        self.display = self.hub.display
+
         # set volume
-        self.hub.speaker.volume(30)
+        self.hub.speaker.volume(100)
 
         self.scan_for_action_triggers()
 
@@ -57,7 +62,68 @@ class Aviatier():
         self.leftLeg.stop()
         self.rightLeg.stop()
 
-    def test_gaga(self):
+    def flying(self):
+        fly1 = ["C4/2/3", "B3/2/3", "C4/2/3", "C4/2/3", "A3/1", "D4/2/3", "D4/2/3", "D4/2/3", "E4/2/3", "F4/2/3", "F4/2/3"]
+        fly2 = ["E4/2/3", "C4/2/3",  "G3/1", "C4/2/3", "C4/2/3", "C4/2/3", "C4/2/3", "D4/2/3", "E4/2/3"]
+        fly3 = ["E4/2/3", "D4/2/3", "C4/2/3", "D4/1", "B3/2/3", "B3/2/3", "B3/2/3", "B3/2/3", "C4/2/3", "D4/2/3"]
+        fly4 = ["D4/2/3", "C4/1"]
+
+        flyingSpeed = 300
+
+        wait(2000)
+        self.aviatar_face()
+
+        self.drive(100)
+        self.arms.run(flyingSpeed/2)
+        self.hub.speaker.play_notes(fly1, tempo=375)
+        self.arms.run(-1*flyingSpeed)
+
+        self.plane_face()
+
+        self.hub.speaker.play_notes(fly2, tempo=375)
+        self.arms.run(flyingSpeed)
+
+        self.aviatar_face()
+
+        self.hub.speaker.play_notes(fly3, tempo=375)
+        self.arms.run(-1*flyingSpeed)
+
+        self.plane_face()
+
+        self.hub.speaker.play_notes(fly4, tempo=375)        
+        self.arms.run(flyingSpeed)
+        wait(500)
+        self.arms.stop()
+
+        self.aviatar_face()
+
+        # resetting arms
+        self.arms.run(-1*flyingSpeed)
+        wait(1000)
+        self.arms.stop()
+
+        # reverse to starting position
+        self.drive(-300)
+        wait(4000)
+        self.stop()
+
+    def face_text(self, string):
+        for char in string:
+            self.display.char(char)
+            wait(1000)
+            self.display.off()
+            wait(200)
+
+
+    def bad_romance(self):
+        self.face_text("ALLY")
+        self.heart_and_stars_face()
+        wait(1000)
+
+        speed = 500
+
+        print('Dancing...')
+        #Move hands
         notes = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
         notes2 = ["R/8", "A3/8", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
         notes3 = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
@@ -68,69 +134,43 @@ class Aviatier():
         notes8 = ["R/8", "A3/8", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
         notes9 = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
         notes10 = ["R/8", "C4/8", "C4/8", "A3/8",  "C4/8",  "C4/4"]
-        lady_gaga = notes+notes2+notes3+notes4 + notes5+notes6+notes7+notes8+notes9+notes10
 
-        self.hub.speaker.play_notes(lady_gaga, tempo=150)
+        tempo = 180
 
-    def flying(self):
-        fly1 = ["C4/2/3", "B3/2/3", "C4/2/3", "C4/2/3", "A3/1", 
-               "D4/2/3", "D4/2/3", "D4/2/3", "E4/2/3", "F4/2/3", "F4/2/3"]
-        fly2 = ["E4/2/3", "C4/2/3",  "G3/1",
-               "C4/2/3", "C4/2/3", "C4/2/3", "C4/2/3", "D4/2/3", "E4/2/3"]
-        fly3 = ["E4/2/3", "D4/2/3", "C4/2/3", "D4/1",
-               "B3/2/3", "B3/2/3", "B3/2/3", "B3/2/3", "C4/2/3", "D4/2/3"]
-        fly4 = ["D4/2/3", "C4/1"]
+        self.arms.run(speed)
+        self.hub.speaker.play_notes(notes, tempo)
+        self.arms.run(-speed)
+        self.hub.speaker.play_notes(notes2, tempo)
+        self.arms.run(speed)
+        self.hub.speaker.play_notes(notes3, tempo)
+        self.arms.run(-speed)
+        self.hub.speaker.play_notes(notes4, tempo)
+        self.turn('clockwise', speed)
+        self.hub.speaker.play_notes(notes5, tempo)
+        self.arms.run(speed)
+        self.drive(speed/4)
+        self.hub.speaker.play_notes(notes6, tempo)
+        self.turn('clockwise', speed)
+        self.hub.speaker.play_notes(notes7, tempo)
+        self.arms.run(-speed)
+        self.drive(speed/2)
+        self.hub.speaker.play_notes(notes8, tempo)
+        self.turn('clockwise', speed)
+        self.hub.speaker.play_notes(notes9, tempo)
+        self.arms.run(speed)
+        self.turn('clockwise', speed)
+        self.hub.speaker.play_notes(notes10, tempo)
 
-        flyingSpeed = 300
-
-        self.drive(100)
-        self.arms.run(flyingSpeed/2)
-        self.hub.speaker.play_notes(fly1, tempo=375)
-        self.arms.run(-1*flyingSpeed)
-
-        self.hub.speaker.play_notes(fly2, tempo=375)
-        self.arms.run(flyingSpeed)
-
-        self.hub.speaker.play_notes(fly3, tempo=375)
-        self.arms.run(-1*flyingSpeed)
-
-        self.hub.speaker.play_notes(fly4, tempo=375)
-        self.arms.run(flyingSpeed)
-        wait(500)
-        self.arms.stop()
-
-
-        # reverse to starting position
-        self.drive(-300)
-        wait(4000)
         self.stop()
-
-
-    def bad_romance(self, speed):
-        while True:
-            print('Dancing...')
-            #Move hands
-            notes = ["A4/4", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
-            notes2 = ["R/8", "A4/8", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
-            notes3 = ["A4/4", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
-            notes4 = ["R/8", "C5/8", "C5/4", "A4/8",  "C5/8",  "C5/4"]
-
-            notes = ["A4/4", "A4/4", "E5/8", "E5/8", "F5/8", "E5/8"]
-
-            self.turn('clockwise', speed)
-            self.hub.speaker.play_notes(notes, tempo=200)
-            self.drive(speed)
-            self.hub.speaker.play_notes(notes2, tempo=200)
-            self.turn('anti', speed)
-            self.hub.speaker.play_notes(notes3, tempo=200)
-            self.drive(speed)
-            self.hub.speaker.play_notes(notes4, tempo=200)
-            self.stop()
-            print('Done moving')
+        print('Done moving')
 
     def jingle_bells(self):
         print("starting jingle bells")
         movingSpeed = 700
+
+        self.christmas_face()
+
+        wait(2000)
 
         self.arms.run(movingSpeed)
         self.turn('clockwise', 400)
@@ -156,8 +196,12 @@ class Aviatier():
         
         self.arms.run(movingSpeed)
         wait(1200)
-
         self.arms.stop()
+
+        # turn to starting position
+        self.turn('clockwise', 400)
+        wait(1200)
+        self.stopAllMotors
 
 
     def angry_mode(self):
@@ -165,12 +209,14 @@ class Aviatier():
         print("starting at:")
         print(startingAngle)
 
-        self.arms.run_target(500, startingAngle+800)
+        self.angry_face()
+
+        self.arms.run_target(500, startingAngle+750)
 
         wait(1000)
 
         angry_rotation = self.detect_enemy()
-        self.arms.run_target(500, startingAngle+100)
+        self.arms.run_target(500, startingAngle-400)
 
         self.alarm_song() 
 
@@ -182,6 +228,8 @@ class Aviatier():
         print("resetting by:")
         print(angry_rotation)
         self.reset_position(angry_rotation)
+
+        self.happy_face()
 
     def shoot(self, chamber:int):
         originalAngle = self.gun.angle()
@@ -223,7 +271,7 @@ class Aviatier():
             print(self.eyes.distance())
 
             # If an object is detected closer than 500mm:
-            if self.eyes.distance() < 800:
+            if self.eyes.distance() < 1000:
                 print("enemy detected!")
                 return angry_rotation
             else:
@@ -233,11 +281,11 @@ class Aviatier():
                     ["E4/4", "C4/4"], tempo=180)
                 angry_rotation = angry_rotation + 20
 
-
     def scan_for_action_triggers(self):
         lightStages = [[50, 0, 0], [0, 50, 0], [0, 0, 50]]
         lightNumber = 0
-        self.hub.light.on(Color.WHITE)
+
+        self.happy_face()
 
         while True:
             foundColor = self.colorEye.color()
@@ -248,8 +296,15 @@ class Aviatier():
                 self.colorEye.lights.off()
                 self.hub.light.on(foundColor)
                 self.COLOR_TRIGGERED_ACTIONS[foundColor]()
-                self.hub.light.on(Color.WHITE)
+                self.happy_face()
+                self.stopAllMotors()
             wait(100)
+
+    def stopAllMotors(self):
+        self.arms.stop()
+        self.leftLeg.stop()
+        self.rightLeg.stop()
+        self.gun.stop()
 
     def angry_face(self):
         self.light.on(Color.RED)
@@ -266,10 +321,8 @@ class Aviatier():
 
         self.display.icon(sadface)
 
-        wait(5000)
-
-    def happy_face2(self):
-        self.light.on(Color.RED)
+    def happy_face(self):
+        self.light.on(Color.GREEN)
 
         happyface = Matrix(
             [
@@ -282,8 +335,6 @@ class Aviatier():
         )
 
         self.display.icon(happyface)
-
-        wait(5000)
 
     def pissed_face(self):
         self.light.on(Color.RED)
@@ -331,7 +382,6 @@ class Aviatier():
             ]
         )
         self.display.animate([heart_icon, star], 600)
-        wait(5000)
 
     def battery_face(self):
         self.light.on(Color.RED)
@@ -370,7 +420,6 @@ class Aviatier():
             ]
         )
         self.display.icon(christmas)
-        wait(5000)
 
     def plane_face(self):
         self.light.animate([Color.GREEN, Color.BLUE, Color.VIOLET], 500)
@@ -385,7 +434,6 @@ class Aviatier():
             ]
         )
         self.display.icon(plane)
-        wait(5000)
 
     def aviatar_face(self):
         self.light.animate([Color.GREEN, Color.BLUE, Color.VIOLET], 500)
@@ -401,7 +449,6 @@ class Aviatier():
         )
 
         self.display.icon(aviatar)
-        wait(5000)
 
     def explosion(self):
         self.light.on(Color.RED)
