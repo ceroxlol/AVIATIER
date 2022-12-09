@@ -6,17 +6,23 @@ from pybricks.tools import wait, StopWatch
 
 print("Hello, AVIATIER!")
 class Aviatier():
-    ROCK_COLORS = Color.RED
 
     def __init__(self):
+        self.COLOR_TRIGGERED_ACTIONS = {
+             # Color.BLUE: self.aviatar,
+             Color.GREEN: self.angry_mode,
+             # Color.RED: self.christmas_ball,
+             # Color.YELLOW: self.pride
+         }
         self.gun = Motor(Port.B)
         self.arms = Motor(Port.D)
         self.rightLeg = Motor(Port.A)
         self.leftLeg = Motor(Port.E)
         self.eyes = UltrasonicSensor(Port.C)
+        self.colorEye = ColorSensor(Port.F)
         self.hub = InventorHub()
 
-        self.angry_mode()
+        self.scan_for_action_triggers()
 
     def stop(self):
         self.rightMotor.stop()
@@ -47,13 +53,13 @@ class Aviatier():
         # hub.speaker.play_notes(fly, tempo=100)
 
         alarm = ["E4/8", "C4/8", "E4/8", "C4/8"]
-                
+
         alarm_song = ["E4/4", "C4/2*1.5", "E4/4", "C4/2*1.5",
                 "E4/4", "C4/4", "E4/4", "C4/4", "E4/8", "C4/8", "D4/2*1.5",
                 "D4/8", "E4/8", "F4/4", "F4/4", "R/4",
                 "E4/8", "D4/8", "E4/4", "C4/4", "R/4",
                 "C4/8", "E4/8", "D4/4", "G3/4", "B3/4", "D4/4", "C4/2*1.5"]
-       
+
         self.hub.speaker.play_notes(alarm_song, tempo=180)
 
 
@@ -69,7 +75,7 @@ class Aviatier():
         angry_rotation = self.detect_enemy()
         self.arms.run_target(500, startingAngle+100)
 
-        self.play_song() 
+        self.play_song()
 
         self.shoot(3)
 
@@ -84,7 +90,7 @@ class Aviatier():
         originalAngle = self.gun.angle()
         print("original angle:")
         print(originalAngle)
-                
+
         if (chamber == 1):
             print("shooting left")
             newAngle = originalAngle-60
@@ -102,10 +108,10 @@ class Aviatier():
             self.gun.run_target(1000, originalAngle-60)
             print("shot left")
 
-        # reset shooting motor to original position  
+        # reset shooting motor to original position
         self.gun.run_target(100, originalAngle)
-        
-        
+
+
     def reset_position(self, angle):
         self.rightLeg.run_angle(100, -1*angle, Stop.HOLD, False)
         self.leftLeg.run_angle(100, -1*angle, Stop.HOLD, True)
@@ -132,10 +138,11 @@ class Aviatier():
 
 
     def find_ball(self):
+        ROCK_COLORS = Color.RED
         print("scanning for colour RED")
         while True:
             # If a ball color is detected, log it
-            if self.sherloc.color() is self.ROCK_COLORS:
+            if self.colorEye.color() is ROCK_COLORS:
                 print("Colour found!")
                 self.hub.speaker.beep()
 
@@ -174,5 +181,21 @@ class Aviatier():
 
             leftMotor.run_angle(500, newAngle)
 
+    def scan_for_action_triggers(self):
+        lightStages = [[50, 0, 0], [0, 50, 0], [0, 0, 50]]
+        lightNumber = 0
+        self.hub.light.on(Color.WHITE)
+
+        while True:
+            foundColor = self.colorEye.color()
+            if (foundColor == Color.NONE):
+                self.colorEye.lights.on(lightStages[lightNumber % 3])
+                lightNumber = lightNumber + 1 if lightNumber < 2 else 0
+            if (foundColor in self.COLOR_TRIGGERED_ACTIONS):
+                self.colorEye.lights.off()
+                self.hub.light.on(foundColor)
+                self.COLOR_TRIGGERED_ACTIONS[foundColor]()
+                self.hub.light.on(Color.WHITE)
+            wait(100)
 
 aviatier = Aviatier()
