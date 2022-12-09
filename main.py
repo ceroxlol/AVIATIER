@@ -17,7 +17,7 @@ class Aviatier():
         self.hub = InventorHub()
 
         # set volume
-        self.hub.speaker.volume(50)
+        self.hub.speaker.volume(30)
 
         # self.test_gaga()
         self.flying()
@@ -51,10 +51,10 @@ class Aviatier():
         self.rightLeg.stop()
 
     def test_gaga(self):
-        notes = ["A4/3", "A4/3", "E4/8", "E4/8", "F4/8", "E4/8"]
-        notes2 = ["R/8", "A4/8", "A4/3", "E4/8", "E4/8", "F4/8", "E4/8"]
-        notes3 = ["A4/3", "A4/3", "E4/8", "E4/8", "F4/8", "E4/8"]
-        notes4 = ["R/8", "C4/8", "C4/8", "A4/8",  "C4/8",  "C4/3", "R/8"]        
+        notes = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes2 = ["R/8", "A3/8", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes3 = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes4 = ["R/8", "C4/8", "C4/8", "A3/8",  "C4/8",  "C4/4", "R/8"]
         notes5 = ["F5/4", "F5/4", "F5/8", "E5/4", "D5/4", "B4/4", "B4/8", "C5/4", "D5/4", "E5/4", "E5/8", "E5/8", "E5/8", "D5/4", "C5/4", "R/8", "R/4", "R/8", "A4/8", "C5/8", "E5/8"]
         notes6 = ["F5/4", "F5/4", "F5/8", "E5/4", "D5/4", "B4/4", "B4/8", "C5/4", "D5/4", "E5/4", "E5/8", "E5/8", "E5/8", "D5/4", "C5/4", "R/8", "R/1"]
         notes7 = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
@@ -66,17 +66,37 @@ class Aviatier():
         self.hub.speaker.play_notes(lady_gaga, tempo=150)
 
     def flying(self):
-        fly = ["C4/2/3", "B4/2/3", "C4/2/3", "C4/8", "A3/4*1.5",
-               "D4/2/3", "D4/2/3", "D4/2/3", "E4/2/3", "F/2/3", "F4/2/3",
-               "F4/2/3", "E4/2/3", "C4/2/3", "G3/2",
-               "C4/2/3", "C4/2/3", "C4/2/3", "C4/2/3", "D4/2/3", "E4/2/3",
-               "E4/2/3", "D4/2/3", "C4/2/3", "D4/2",
-               "H4/2/3", "H4/2/3", "H4/2/3", "H4/2/3", "C4/2/3", "D4/2/3",
-               "D4/2/3", "C4/2/3"]
+        fly1 = ["C4/2/3", "B3/2/3", "C4/2/3", "C4/2/3", "A3/1", 
+               "D4/2/3", "D4/2/3", "D4/2/3", "E4/2/3", "F4/2/3", "F4/2/3"]
+        fly2 = ["E4/2/3", "C4/2/3",  "G3/1",
+               "C4/2/3", "C4/2/3", "C4/2/3", "C4/2/3", "D4/2/3", "E4/2/3"]
+        fly3 = ["E4/2/3", "D4/2/3", "C4/2/3", "D4/1",
+               "B3/2/3", "B3/2/3", "B3/2/3", "B3/2/3", "C4/2/3", "D4/2/3"]
+        fly4 = ["D4/2/3", "C4/1"]
 
-        # self.drive(200)
-        # self.arms.run()
-        self.hub.speaker.play_notes(fly, tempo=100)
+        flyingSpeed = 300
+
+        self.drive(100)
+        self.arms.run(flyingSpeed/2)
+        self.hub.speaker.play_notes(fly1, tempo=375)
+        self.arms.run(-1*flyingSpeed)
+
+        self.hub.speaker.play_notes(fly2, tempo=375)
+        self.arms.run(flyingSpeed)
+
+        self.hub.speaker.play_notes(fly3, tempo=375)
+        self.arms.run(-1*flyingSpeed)
+
+        self.hub.speaker.play_notes(fly4, tempo=375)
+        self.arms.run(flyingSpeed)
+        wait(500)
+        self.arms.stop()
+
+
+        # reverse to starting position
+        self.drive(-300)
+        wait(4000)
+        self.stop()
 
 
     def bad_romance(self, speed):
@@ -106,7 +126,7 @@ class Aviatier():
         movingSpeed = 700
 
         self.arms.run(movingSpeed)
-        self.turn('clockwise', movingSpeed)
+        self.turn('clockwise', 400)
         self.hub.speaker.play_notes(["E4/4", "E4/4", "E4/2"], tempo=200)
         self.arms.run(-2*movingSpeed)
         self.hub.speaker.play_notes(["E4/4", "E4/4", "E4/2"], tempo=200)
@@ -116,7 +136,7 @@ class Aviatier():
         self.arms.run(-2*movingSpeed)
         self.hub.speaker.play_notes(["E4/1"], tempo=200)
         self.arms.run(2*movingSpeed)
-        self.turn('anti', movingSpeed)
+        self.turn('anti', 400)
         self.hub.speaker.play_notes(
             ["F4/4", "F4/4", "F4/4", "F4/4"], tempo=200)
         self.arms.run(-2*movingSpeed)
@@ -205,50 +225,5 @@ class Aviatier():
                 self.hub.speaker.play_notes(
                     ["E4/4", "C4/4"], tempo=180)
                 angry_rotation = angry_rotation + 20
-
-
-    def find_ball(self):
-        print("scanning for colour RED")
-        while True:
-            # If a ball color is detected, log it
-            if self.sherloc.color() is self.ROCK_COLORS:
-                print("Colour found!")
-                self.hub.speaker.beep()
-
-            wait(100)
-
-
-    def grab():
-        while True:
-            grabSpeed = 100
-            grabber.run_target(-1 * grabSpeed)
-            wait()
-            grabber.stop()
-            wait(1000)
-
-
-    def drive():
-        while True:
-            # Set the speed based on dial angle
-            speed = 500
-            if abs(speed) < 100:
-                speed = 0
-
-            leftLeg.run(speed)
-            rightLeg.run(-1 * speed)
-
-            wait(1000)
-            leftLeg.stop()
-            rightLeg.stop()
-            wait(1000)
-
-            print(leftLeg.angle())
-            print("+90=")
-            newAngle = leftLeg.angle() + 90
-
-            print(newAngle)
-
-            leftLeg.run_angle(500, newAngle)
-
 
 aviatier = Aviatier()
