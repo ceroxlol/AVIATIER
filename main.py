@@ -11,7 +11,7 @@ class Aviatier:
         self.display = self.hub.display
         self.light = self.hub.light
 
-        self.christmas_face()
+        self.heart_and_stars_face()
 
     def angry_face(self):
         self.light.on(Color.RED)
@@ -81,16 +81,6 @@ class Aviatier:
         wait(5000)
 
     def heart_and_stars_face(self):
-        heart = Matrix(
-            [
-                [10, 100, 25, 100, 10],
-                [100, 10, 100, 10, 100],
-                [100, 10, 0, 10, 100],
-                [0, 100, 0, 100, 0],
-                [0, 0, 100, 0, 0]
-            ]
-        )
-
         heart_icon = Icon.HEART
 
         star = Matrix(
@@ -102,7 +92,7 @@ class Aviatier:
                 [50, 0, 100, 0, 50]
             ]
         )
-        self.display.animate([heart_icon, star], 300)
+        self.display.animate([heart_icon, star], 600)
         wait(5000)
 
     def battery_face(self):
