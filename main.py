@@ -19,8 +19,9 @@ class Aviatier():
         # set volume
         self.hub.speaker.volume(50)
 
-        #self.test_gaga()
-        self.jingle_bells()
+        # self.test_gaga()
+        self.flying()
+        # self.jingle_bells()
 
         # self.angry_mode()
 
@@ -49,6 +50,33 @@ class Aviatier():
         self.leftLeg.stop()
         self.rightLeg.stop()
 
+    def test_gaga(self):
+        notes = ["A4/3", "A4/3", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes2 = ["R/8", "A4/8", "A4/3", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes3 = ["A4/3", "A4/3", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes4 = ["R/8", "C4/8", "C4/8", "A4/8",  "C4/8",  "C4/3", "R/8"]        
+        notes5 = ["F5/4", "F5/4", "F5/8", "E5/4", "D5/4", "B4/4", "B4/8", "C5/4", "D5/4", "E5/4", "E5/8", "E5/8", "E5/8", "D5/4", "C5/4", "R/8", "R/4", "R/8", "A4/8", "C5/8", "E5/8"]
+        notes6 = ["F5/4", "F5/4", "F5/8", "E5/4", "D5/4", "B4/4", "B4/8", "C5/4", "D5/4", "E5/4", "E5/8", "E5/8", "E5/8", "D5/4", "C5/4", "R/8", "R/1"]
+        notes7 = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes8 = ["R/8", "A3/8", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes9 = ["A3/4", "A3/4", "E4/8", "E4/8", "F4/8", "E4/8"]
+        notes10 = ["R/8", "C4/8", "C4/8", "A3/8",  "C4/8",  "C4/4"]
+        lady_gaga = notes+notes2+notes3+notes4 + notes5+notes6+notes7+notes8+notes9+notes10
+
+        self.hub.speaker.play_notes(lady_gaga, tempo=150)
+
+    def flying(self):
+        fly = ["C4/2/3", "B4/2/3", "C4/2/3", "C4/8", "A3/4*1.5",
+               "D4/2/3", "D4/2/3", "D4/2/3", "E4/2/3", "F/2/3", "F4/2/3",
+               "F4/2/3", "E4/2/3", "C4/2/3", "G3/2",
+               "C4/2/3", "C4/2/3", "C4/2/3", "C4/2/3", "D4/2/3", "E4/2/3",
+               "E4/2/3", "D4/2/3", "C4/2/3", "D4/2",
+               "H4/2/3", "H4/2/3", "H4/2/3", "H4/2/3", "C4/2/3", "D4/2/3",
+               "D4/2/3", "C4/2/3"]
+
+        # self.drive(200)
+        # self.arms.run()
+        self.hub.speaker.play_notes(fly, tempo=100)
 
 
     def bad_romance(self, speed):
